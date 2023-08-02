@@ -1,0 +1,26 @@
+{
+  "name": "recover-source",
+  "version": "1.0.1",
+  "description": "CLI for recovering JS/TS source code given a directory with minified/uglified .js or .ts files with their respective sourcemap files. Returns the original files as they were before compilation.",
+  "main": "index.js",
+  "bin": {
+    "recover-source": "node ./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript",
+    "sourcemap",
+    "coderecovery",
+    "typescript",
+    "minified",
+    "uglified"
+  ],
+  "author": "Pablo Schaffner",
+  "license": "ISC",
+  "dependencies": {
+    "source-map": "^0.7.4",
+    "yargs": "^17.7.2"
+  }
+}
