@@ -1,6 +1,6 @@
 {
   "name": "recover-source",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Unmask the secrets of your minified code with Recover-Source! This CLI breathes life back into your JS/TS source code from a directory of minified/uglified files, along with their source maps. Watch as your original files return in all their pre-compilation glory!",
   "main": "index.js",
   "bin": {
@@ -20,6 +20,7 @@
   "author": "Pablo Schaffner",
   "license": "ISC",
   "dependencies": {
+    "prettier": "^3.0.0",
     "source-map": "^0.7.4",
     "yargs": "^17.7.2"
   }

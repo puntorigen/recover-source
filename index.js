@@ -6,16 +6,16 @@ const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 
 const argv = yargs(hideBin(process.argv))
-  .usage('Usage: $0 [options]')
-  .option('input', {
-    description: 'The input path to the minified JavaScript file or a directory containing multiple files',
-    alias: 'i',
-    type: 'string',
-    demandOption: true
-  })
-  .help()
-  .alias('help', 'h')
-  .argv;
+    .usage('Usage: $0 [options]')
+    .option('input', {
+        description: 'The input path to the minified JavaScript file or a directory containing multiple files',
+        alias: 'i',
+        type: 'string',
+        demandOption: true
+    })
+    .help()
+    .alias('help', 'h')
+    .argv;
 
 const handleFile = async (minifiedFilePath) => {
     // Check if the Source Map exists
@@ -51,7 +51,7 @@ const handleFile = async (minifiedFilePath) => {
         } else {
             // If sourcesContent doesn't exist, reconstruct the source code
             const lines = minifiedCode.split('\n');
-            const reconstructedSource = {};
+            let reconstructedSource = '';
 
             lines.forEach((line, lineIndex) => {
                 const lineNum = lineIndex + 1;
@@ -63,21 +63,27 @@ const handleFile = async (minifiedFilePath) => {
 
                     if (originalPosition.source === null) continue;
 
-                    if (!reconstructedSource[originalPosition.source]) {
-                        reconstructedSource[originalPosition.source] = [];
+                    if (originalPosition.name) {
+                        reconstructedSource += originalPosition.name;
+                    } else {
+                        reconstructedSource += minifiedCode.charAt(column);
                     }
-
-                    reconstructedSource[originalPosition.source][originalPosition.line] =
-                        (reconstructedSource[originalPosition.source][originalPosition.line] || '') + line.charAt(column);
                 }
+
+                reconstructedSource += '\n';
             });
 
-            for (const source in reconstructedSource) {
-                const originalFilePath = path.join(path.dirname(minifiedFilePath), path.basename(source, '.js') + '-recovered.js');
-                fs.mkdirSync(path.dirname(originalFilePath), { recursive: true });
-                fs.writeFileSync(originalFilePath, reconstructedSource[source].join('\n'));
-                console.log(`Source code recovered to ${originalFilePath}`);
+            // prettify the code
+            try {
+                reconstructedSource = prettier.format(reconstructedSource, { semi: false, parser: "babel" });
+            } catch (error) {
+                console.error("An error occurred while prettifying the code:", error);
             }
+
+            const originalFilePath = path.join(path.dirname(minifiedFilePath), path.basename(minifiedFilePath, '.js') + '-recovered.js');
+            fs.mkdirSync(path.dirname(originalFilePath), { recursive: true });
+            fs.writeFileSync(originalFilePath, reconstructedSource);
+            console.log(`Source code recovered to ${originalFilePath}`);
         }
     });
 };
