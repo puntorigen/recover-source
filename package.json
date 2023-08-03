@@ -1,7 +1,7 @@
 {
   "name": "recover-source",
   "version": "1.0.1",
-  "description": "CLI for recovering JS/TS source code given a directory with minified/uglified .js or .ts files with their respective sourcemap files. Returns the original files as they were before compilation.",
+  "description": "Unmask the secrets of your minified code with Recover-Source! This CLI breathes life back into your JS/TS source code from a directory of minified/uglified files, along with their source maps. Watch as your original files return in all their pre-compilation glory!",
   "main": "index.js",
   "bin": {
     "recover-source": "node ./index.js"
