@@ -7,10 +7,15 @@ Recover-source is a powerful CLI tool that brings your JS/TS source code back to
 npm i recover-source -g
 ```
 
+You can also use this program via `npx` (packaged with NodeJS):
+```bash
+npx recover-source -i  <path-to-directory-with-minified-files>
+```
+
 And that's it! Recover-source is ready for action :rocket:!
 
 ## Usage :video_game: 
-To use recover-source, simply provide it with a directoy containing minified files:
+To use recover-source, simply provide it with a directory containing minified files:
 ```bash
 recover-source -i <path-to-directory-with-minified-files>
 ```
