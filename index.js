@@ -4,6 +4,7 @@ const { SourceMapConsumer } = require('source-map');
 const path = require('path');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
+const prettier = require('prettier');
 
 const argv = yargs(hideBin(process.argv))
     .usage('Usage: $0 [options]')
@@ -44,8 +45,12 @@ const handleFile = async (minifiedFilePath) => {
                 if (sourceContents[source] !== null) {
                     const originalFilePath = path.join(path.dirname(minifiedFilePath), path.basename(source, '.js') + '');
                     fs.mkdirSync(path.dirname(originalFilePath), { recursive: true });
-                    fs.writeFileSync(originalFilePath, sourceContents[source]);
-                    console.log(`Source code recovered to ${originalFilePath}`);
+                    try {
+                        await fs.promises.writeFile(originalFilePath, sourceContents[source]);
+                        console.log(`Source code recovered to ${originalFilePath}`);
+                    } catch (error) {
+                        console.error(`Error saving file ${originalFilePath}:`, error);
+                    }
                 }
             }
         } else {
@@ -82,8 +87,12 @@ const handleFile = async (minifiedFilePath) => {
 
             const originalFilePath = path.join(path.dirname(minifiedFilePath), path.basename(minifiedFilePath, '.js') + '-recovered.js');
             fs.mkdirSync(path.dirname(originalFilePath), { recursive: true });
-            fs.writeFileSync(originalFilePath, reconstructedSource);
-            console.log(`Source code recovered to ${originalFilePath}`);
+            try {
+                await fs.promises.writeFile(originalFilePath, reconstructedSource);
+                console.log(`Source code recovered to ${originalFilePath}`);
+            } catch (error) {
+                console.error(`Error saving file ${originalFilePath}:`, error);
+            }
         }
     });
 };
